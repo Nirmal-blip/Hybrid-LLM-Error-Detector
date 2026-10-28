@@ -1,0 +1,952 @@
+[
+  {
+    "id": "test-persist-1",
+    "timestamp": "2026-10-25T10:00:24.064Z",
+    "problemStatement": "Persistent storage test",
+    "verdict": "LOGIC_ERRORS_DETECTED",
+    "compilation": {
+      "success": true
+    },
+    "testExecution": {
+      "passedCount": 1,
+      "totalTests": 1
+    },
+    "reconciliation": {
+      "summary": {
+        "total": 1,
+        "verified": 1
+      }
+    }
+  },
+  {
+    "id": "analysis-e1d151e3-7819-4739-a46b-c4c181f48ef5",
+    "timestamp": "2026-10-25T10:19:14.150Z",
+    "problemStatement": "Find the maximum sum of a contiguous non-empty subarray. The array can contain negative integers.",
+    "sourceCode": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\n// Buggy Kadane's:\n// Initializes max_so_far = 0, which fails when all numbers are negative!\n// Should initialize max_so_far = arr[0].\nint maxSubarraySum(const vector<int>& arr) {\n    int max_so_far = 0; // Bug: fails for negative numbers\n    int curr_max = 0;\n\n    for (size_t i = 0; i < arr.size(); i++) {\n        curr_max += arr[i];\n        if (curr_max < 0) {\n            curr_max = 0;\n        }\n        if (curr_max > max_so_far) {\n            max_so_far = curr_max;\n        }\n    }\n    return max_so_far;\n}\n\nint main() {\n    int n;\n    if (!(cin >> n)) return 0;\n    vector<int> arr(n);\n    for (int i = 0; i < n; i++) {\n        cin >> arr[i];\n    }\n    cout << maxSubarraySum(arr) << endl;\n    return 0;\n}\n",
+    "correctedCode": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint maxSubarraySum(const vector<int>& arr) {\n    // Initialize with the first element to handle all‑negative arrays\n    int max_so_far = arr[0];\n    int curr_max = arr[0];\n\n    for (size_t i = 1; i < arr.size(); i++) {\n        curr_max = max(arr[i], curr_max + arr[i]);\n        max_so_far = max(max_so_far, curr_max);\n    }\n    return max_so_far;\n}\n\nint main() {\n    int n;\n    if (!(cin >> n)) return 0;\n    vector<int> arr(n);\n    for (int i = 0; i < n; i++) {\n        cin >> arr[i];\n    }\n    cout << maxSubarraySum(arr) << endl;\n    return 0;\n}\n",
+    "lineDiff": [
+      {
+        "lineNumber": 1,
+        "original": "#include <iostream>",
+        "corrected": "#include <iostream>",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 2,
+        "original": "#include <vector>",
+        "corrected": "#include <vector>",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 3,
+        "original": "#include <algorithm>",
+        "corrected": "#include <algorithm>",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 4,
+        "original": "",
+        "corrected": "",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 5,
+        "original": "using namespace std;",
+        "corrected": "using namespace std;",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 6,
+        "original": "",
+        "corrected": "",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 7,
+        "original": "// Buggy Kadane's:",
+        "corrected": "int maxSubarraySum(const vector<int>& arr) {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 8,
+        "original": "// Initializes max_so_far = 0, which fails when all numbers are negative!",
+        "corrected": "    // Initialize with the first element to handle all‑negative arrays",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 9,
+        "original": "// Should initialize max_so_far = arr[0].",
+        "corrected": "    int max_so_far = arr[0];",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 10,
+        "original": "int maxSubarraySum(const vector<int>& arr) {",
+        "corrected": "    int curr_max = arr[0];",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 11,
+        "original": "    int max_so_far = 0; // Bug: fails for negative numbers",
+        "corrected": "",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 12,
+        "original": "    int curr_max = 0;",
+        "corrected": "    for (size_t i = 1; i < arr.size(); i++) {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 13,
+        "original": "",
+        "corrected": "        curr_max = max(arr[i], curr_max + arr[i]);",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 14,
+        "original": "    for (size_t i = 0; i < arr.size(); i++) {",
+        "corrected": "        max_so_far = max(max_so_far, curr_max);",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 15,
+        "original": "        curr_max += arr[i];",
+        "corrected": "    }",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 16,
+        "original": "        if (curr_max < 0) {",
+        "corrected": "    return max_so_far;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 17,
+        "original": "            curr_max = 0;",
+        "corrected": "}",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 18,
+        "original": "        }",
+        "corrected": "",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 19,
+        "original": "        if (curr_max > max_so_far) {",
+        "corrected": "int main() {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 20,
+        "original": "            max_so_far = curr_max;",
+        "corrected": "    int n;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 21,
+        "original": "        }",
+        "corrected": "    if (!(cin >> n)) return 0;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 22,
+        "original": "    }",
+        "corrected": "    vector<int> arr(n);",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 23,
+        "original": "    return max_so_far;",
+        "corrected": "    for (int i = 0; i < n; i++) {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 24,
+        "original": "}",
+        "corrected": "        cin >> arr[i];",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 25,
+        "original": "",
+        "corrected": "    }",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 26,
+        "original": "int main() {",
+        "corrected": "    cout << maxSubarraySum(arr) << endl;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 27,
+        "original": "    int n;",
+        "corrected": "    return 0;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 28,
+        "original": "    if (!(cin >> n)) return 0;",
+        "corrected": "}",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 29,
+        "original": "    vector<int> arr(n);",
+        "corrected": "",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 30,
+        "original": "    for (int i = 0; i < n; i++) {",
+        "corrected": null,
+        "type": "removed"
+      },
+      {
+        "lineNumber": 31,
+        "original": "        cin >> arr[i];",
+        "corrected": null,
+        "type": "removed"
+      },
+      {
+        "lineNumber": 32,
+        "original": "    }",
+        "corrected": null,
+        "type": "removed"
+      },
+      {
+        "lineNumber": 33,
+        "original": "    cout << maxSubarraySum(arr) << endl;",
+        "corrected": null,
+        "type": "removed"
+      },
+      {
+        "lineNumber": 34,
+        "original": "    return 0;",
+        "corrected": null,
+        "type": "removed"
+      },
+      {
+        "lineNumber": 35,
+        "original": "}",
+        "corrected": null,
+        "type": "removed"
+      },
+      {
+        "lineNumber": 36,
+        "original": "",
+        "corrected": null,
+        "type": "removed"
+      }
+    ],
+    "verdict": "LOGIC_ERRORS_DETECTED",
+    "verdictDescription": "Logical errors or behavioral defects were identified.",
+    "compilation": {
+      "success": true,
+      "exitCode": 0,
+      "durationMs": 873,
+      "compiler": "clang++",
+      "compilerVersion": "Apple clang version 16.0.0 (clang-1600.0.26.6)",
+      "diagnostics": [],
+      "rawOutput": ""
+    },
+    "testExecution": {
+      "totalTests": 2,
+      "passedCount": 1,
+      "failedCount": 1,
+      "allPassed": false,
+      "tests": [
+        {
+          "id": "tc-1",
+          "name": "Mixed Positive and Negative",
+          "input": "5\n-2 1 -3 4 -1",
+          "expectedOutput": "4",
+          "actualOutput": "4\n",
+          "stderr": "",
+          "status": "PASSED",
+          "passed": true,
+          "executionTimeMs": 852,
+          "exitCode": 0,
+          "signal": null,
+          "errorMessage": null
+        },
+        {
+          "id": "tc-2",
+          "name": "All Negative Numbers (Fails if max_so_far=0)",
+          "input": "3\n-5 -2 -8",
+          "expectedOutput": "-2",
+          "actualOutput": "0\n",
+          "stderr": "",
+          "status": "WRONG_ANSWER",
+          "passed": false,
+          "executionTimeMs": 6,
+          "exitCode": 0,
+          "signal": null,
+          "errorMessage": null
+        }
+      ]
+    },
+    "staticAnalysis": {
+      "totalFindings": 0,
+      "findings": []
+    },
+    "llmAnalysis": {
+      "model": "openai/gpt-oss-120b",
+      "source": "groq",
+      "analysisSummary": "The algorithm initializes max_so_far and curr_max to 0, which incorrectly returns 0 for arrays containing only negative numbers. The fix is to start both variables with the first element and iterate from the second element.",
+      "fixExplanation": "The original code set both max_so_far and curr_max to 0, which makes the algorithm return 0 for an all‑negative array. By initializing them with the first array element we correctly capture the maximum possible sum even when all numbers are negative. The loop then starts at index 1, and the standard Kadane update (curr_max = max(arr[i], curr_max + arr[i])) ensures proper handling of each element.",
+      "edgeCasesMissed": [
+        "Empty input array (n == 0) – the current fix assumes at least one element; handling this case would require an early return or guard.",
+        "Very large input causing integer overflow – using long long would be safer for large sums."
+      ]
+    },
+    "reconciliation": {
+      "bugs": [
+        {
+          "id": "bug-1",
+          "title": "Incorrect initialization for Kadane's algorithm",
+          "category": "Logic Error",
+          "severity": "Critical",
+          "lines": [
+            12,
+            13
+          ],
+          "rootCause": "max_so_far and curr_max are set to 0, causing the algorithm to treat an all‑negative array as having sum 0 instead of the largest (least negative) element.",
+          "problematicCode": "int max_so_far = 0; // Bug: fails for negative numbers\n    int curr_max = 0;",
+          "suggestedFixSnippet": "int max_so_far = arr[0];\n    int curr_max = arr[0];",
+          "confidence": 0.99,
+          "verificationStatus": "VERIFIED",
+          "evidence": "Empirically verified by dynamic test case: Test 'All Negative Numbers (Fails if max_so_far=0)' failed with Wrong Answer (Expected: '-2', Actual: '0')."
+        },
+        {
+          "id": "bug-2",
+          "title": "Loop starts at index 0 after initializing with arr[0]",
+          "category": "Logic Error",
+          "severity": "Medium",
+          "lines": [
+            15
+          ],
+          "rootCause": "After initializing with the first element, the loop should start from the second element to avoid double‑counting arr[0].",
+          "problematicCode": "for (size_t i = 0; i < arr.size(); i++) {",
+          "suggestedFixSnippet": "for (size_t i = 1; i < arr.size(); i++) {",
+          "confidence": 0.95,
+          "verificationStatus": "VERIFIED",
+          "evidence": "Empirically verified by dynamic test case: Test 'All Negative Numbers (Fails if max_so_far=0)' failed with Wrong Answer (Expected: '-2', Actual: '0')."
+        }
+      ],
+      "summary": {
+        "total": 2,
+        "verified": 2,
+        "suspected": 0,
+        "unverified": 0,
+        "inconclusive": 0
+      }
+    }
+  },
+  {
+    "id": "analysis-4ace88a6-fce7-41bb-9ee2-bac16a1e1372",
+    "timestamp": "2026-10-25T10:20:40.233Z",
+    "problemStatement": "",
+    "sourceCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Hello, World!\" << endl;\n    return 0;\n}\n",
+    "correctedCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Hello, World!\" << endl;\n    return 0;\n}\n",
+    "lineDiff": [
+      {
+        "lineNumber": 1,
+        "original": "#include <iostream>",
+        "corrected": "#include <iostream>",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 2,
+        "original": "using namespace std;",
+        "corrected": "using namespace std;",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 3,
+        "original": "",
+        "corrected": "",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 4,
+        "original": "int main() {",
+        "corrected": "int main() {",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 5,
+        "original": "    cout << \"Hello, World!\" << endl;",
+        "corrected": "    cout << \"Hello, World!\" << endl;",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 6,
+        "original": "    return 0;",
+        "corrected": "    return 0;",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 7,
+        "original": "}",
+        "corrected": "}",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 8,
+        "original": "",
+        "corrected": "",
+        "type": "unchanged"
+      }
+    ],
+    "verdict": "ALL_TESTS_PASSED",
+    "verdictDescription": "All supplied test cases passed. Review suspected findings for potential edge cases.",
+    "compilation": {
+      "success": true,
+      "exitCode": 0,
+      "durationMs": 775,
+      "compiler": "clang++",
+      "compilerVersion": "Apple clang version 16.0.0 (clang-1600.0.26.6)",
+      "diagnostics": [],
+      "rawOutput": ""
+    },
+    "testExecution": {
+      "totalTests": 1,
+      "passedCount": 1,
+      "failedCount": 0,
+      "allPassed": true,
+      "tests": [
+        {
+          "id": "tc-1",
+          "name": "Sample Test",
+          "input": "",
+          "expectedOutput": "Hello, World!",
+          "actualOutput": "Hello, World!\n",
+          "stderr": "",
+          "status": "PASSED",
+          "passed": true,
+          "executionTimeMs": 952,
+          "exitCode": 0,
+          "signal": null,
+          "errorMessage": null
+        }
+      ]
+    },
+    "staticAnalysis": {
+      "totalFindings": 0,
+      "findings": []
+    },
+    "llmAnalysis": {
+      "model": "openai/gpt-oss-120b",
+      "source": "groq",
+      "analysisSummary": "The program compiles without errors and produces the exact expected output \"Hello, World!\" for the given test. No bugs were detected.",
+      "fixExplanation": "No changes are necessary; the source code already meets the intended behavior and passes all provided tests.",
+      "edgeCasesMissed": []
+    },
+    "reconciliation": {
+      "bugs": [],
+      "summary": {
+        "total": 0,
+        "verified": 0,
+        "suspected": 0,
+        "unverified": 0,
+        "inconclusive": 0
+      }
+    }
+  },
+  {
+    "id": "analysis-c8338629-0537-4fd2-a5f3-8a64897db36c",
+    "timestamp": "2026-10-25T10:20:54.369Z",
+    "problemStatement": "",
+    "sourceCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n \"Hello, World!\" << endl;\n    return 0;\n}\n",
+    "correctedCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Hello, World!\" << endl;\n    return 0;\n}\n",
+    "lineDiff": [
+      {
+        "lineNumber": 1,
+        "original": "#include <iostream>",
+        "corrected": "#include <iostream>",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 2,
+        "original": "using namespace std;",
+        "corrected": "using namespace std;",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 3,
+        "original": "",
+        "corrected": "",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 4,
+        "original": "int main() {",
+        "corrected": "int main() {",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 5,
+        "original": " \"Hello, World!\" << endl;",
+        "corrected": "    cout << \"Hello, World!\" << endl;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 6,
+        "original": "    return 0;",
+        "corrected": "    return 0;",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 7,
+        "original": "}",
+        "corrected": "}",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 8,
+        "original": "",
+        "corrected": "",
+        "type": "unchanged"
+      }
+    ],
+    "verdict": "COMPILATION_ERROR",
+    "verdictDescription": "The C++ program failed to compile due to syntax or semantic errors.",
+    "compilation": {
+      "success": false,
+      "exitCode": 1,
+      "durationMs": 494,
+      "compiler": "clang++",
+      "compilerVersion": "Apple clang version 16.0.0 (clang-1600.0.26.6)",
+      "diagnostics": [
+        {
+          "line": 5,
+          "column": 21,
+          "severity": "error",
+          "message": "reference to overloaded function could not be resolved; did you mean to call it?",
+          "raw": "/var/folders/p4/14p0vs1x6hv00k86plz3cyk80000gn/T/cpp_build_NDA59v/source.cpp:5:21: error: reference to overloaded function could not be resolved; did you mean to call it?"
+        }
+      ],
+      "rawOutput": "/var/folders/p4/14p0vs1x6hv00k86plz3cyk80000gn/T/cpp_build_NDA59v/source.cpp:5:21: error: reference to overloaded function could not be resolved; did you mean to call it?\n    5 |  \"Hello, World!\" << endl;\n      |                     ^~~~\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:891:62: note: possible target for call\n  891 | _LIBCPP_HIDE_FROM_ABI inline basic_ostream<_CharT, _Traits>& endl(basic_ostream<_CharT, _Traits>& __os) {\n      |                                                              ^\n1 error generated."
+    },
+    "testExecution": {
+      "totalTests": 1,
+      "passedCount": 0,
+      "failedCount": 0,
+      "allPassed": false,
+      "tests": []
+    },
+    "staticAnalysis": {
+      "totalFindings": 0,
+      "findings": []
+    },
+    "llmAnalysis": {
+      "model": "openai/gpt-oss-120b",
+      "source": "groq",
+      "analysisSummary": "The program attempts to print a string but omits the output stream, causing a compilation error because a string literal cannot be left‑hand side of operator<<.",
+      "fixExplanation": "Inserted the standard output stream 'cout' before the string literal so the expression becomes a valid stream insertion chain, matching the intended behavior of printing \"Hello, World!\" followed by a newline.",
+      "edgeCasesMissed": []
+    },
+    "reconciliation": {
+      "bugs": [
+        {
+          "id": "bug-1",
+          "title": "Missing output stream before string literal",
+          "category": "Compilation Error",
+          "severity": "Critical",
+          "lines": [
+            5
+          ],
+          "rootCause": "The line \"Hello, World!\" << endl; tries to use operator<< with a string literal as the left operand, which is not a stream. The intended stream (cout) is missing, leading to an unresolved overloaded function reference.",
+          "problematicCode": "\"Hello, World!\" << endl;",
+          "suggestedFixSnippet": "cout << \"Hello, World!\" << endl;",
+          "confidence": 0.99,
+          "verificationStatus": "VERIFIED",
+          "evidence": "Confirmed by compiler error at line 5: reference to overloaded function could not be resolved; did you mean to call it?"
+        }
+      ],
+      "summary": {
+        "total": 1,
+        "verified": 1,
+        "suspected": 0,
+        "unverified": 0,
+        "inconclusive": 0
+      }
+    }
+  },
+  {
+    "_id": "6adf9ea192605aa165986d43",
+    "id": "analysis-244cf953-04de-4c7c-8b43-61a7cc2623a2",
+    "__v": 0,
+    "compilation": {
+      "success": true,
+      "exitCode": 0,
+      "durationMs": 1012,
+      "compiler": "clang++",
+      "compilerVersion": "Apple clang version 16.0.0 (clang-1600.0.26.6)",
+      "diagnostics": [],
+      "rawOutput": ""
+    },
+    "correctedCode": "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nint binarySearch(const vector<int>& arr, int target) {\n    int l = 0;\n    int r = static_cast<int>(arr.size()) - 1; // last valid index\n\n    while (l <= r) {\n        int mid = l + (r - l) / 2; // safe midpoint\n        if (arr[mid] == target) {\n            return mid;\n        } else if (arr[mid] < target) {\n            l = mid + 1;\n        } else {\n            r = mid - 1; // shrink right bound\n        }\n    }\n    return -1;\n}\n\nint main() {\n    int n, target;\n    if (!(cin >> n >> target)) return 0;\n    vector<int> arr(n);\n    for (int i = 0; i < n; i++) {\n        cin >> arr[i];\n    }\n    cout << binarySearch(arr, target) << endl;\n    return 0;\n}\n",
+    "createdAt": "2026-10-26T18:40:33.145Z",
+    "lineDiff": [
+      {
+        "lineNumber": 1,
+        "original": "#include <iostream>",
+        "corrected": "#include <iostream>",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 2,
+        "original": "#include <vector>",
+        "corrected": "#include <vector>",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 3,
+        "original": "",
+        "corrected": "",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 4,
+        "original": "using namespace std;",
+        "corrected": "using namespace std;",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 5,
+        "original": "",
+        "corrected": "",
+        "type": "unchanged"
+      },
+      {
+        "lineNumber": 6,
+        "original": "// Buggy Binary Search:",
+        "corrected": "int binarySearch(const vector<int>& arr, int target) {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 7,
+        "original": "// 1. mid = (l + r) / 2 can overflow for large indices.",
+        "corrected": "    int l = 0;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 8,
+        "original": "// 2. r = mid leads to an infinite loop if target is smaller than middle element.",
+        "corrected": "    int r = static_cast<int>(arr.size()) - 1; // last valid index",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 9,
+        "original": "int binarySearch(const vector<int>& arr, int target) {",
+        "corrected": "",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 10,
+        "original": "    int l = 0;",
+        "corrected": "    while (l <= r) {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 11,
+        "original": "    int r = arr.size(); // Potential boundary issue",
+        "corrected": "        int mid = l + (r - l) / 2; // safe midpoint",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 12,
+        "original": "",
+        "corrected": "        if (arr[mid] == target) {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 13,
+        "original": "    while (l <= r) {",
+        "corrected": "            return mid;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 14,
+        "original": "        int mid = (l + r) / 2; // Midpoint integer overflow hazard",
+        "corrected": "        } else if (arr[mid] < target) {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 15,
+        "original": "        if (arr[mid] == target) {",
+        "corrected": "            l = mid + 1;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 16,
+        "original": "            return mid;",
+        "corrected": "        } else {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 17,
+        "original": "        } else if (arr[mid] < target) {",
+        "corrected": "            r = mid - 1; // shrink right bound",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 18,
+        "original": "            l = mid + 1;",
+        "corrected": "        }",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 19,
+        "original": "        } else {",
+        "corrected": "    }",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 20,
+        "original": "            r = mid; // Bug: leads to infinite loop when target is smaller",
+        "corrected": "    return -1;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 21,
+        "original": "        }",
+        "corrected": "}",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 22,
+        "original": "    }",
+        "corrected": "",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 23,
+        "original": "    return -1;",
+        "corrected": "int main() {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 24,
+        "original": "}",
+        "corrected": "    int n, target;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 25,
+        "original": "",
+        "corrected": "    if (!(cin >> n >> target)) return 0;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 26,
+        "original": "int main() {",
+        "corrected": "    vector<int> arr(n);",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 27,
+        "original": "    int n, target;",
+        "corrected": "    for (int i = 0; i < n; i++) {",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 28,
+        "original": "    if (!(cin >> n >> target)) return 0;",
+        "corrected": "        cin >> arr[i];",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 29,
+        "original": "    vector<int> arr(n);",
+        "corrected": "    }",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 30,
+        "original": "    for (int i = 0; i < n; i++) {",
+        "corrected": "    cout << binarySearch(arr, target) << endl;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 31,
+        "original": "        cin >> arr[i];",
+        "corrected": "    return 0;",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 32,
+        "original": "    }",
+        "corrected": "}",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 33,
+        "original": "    cout << binarySearch(arr, target) << endl;",
+        "corrected": "",
+        "type": "modified"
+      },
+      {
+        "lineNumber": 34,
+        "original": "    return 0;",
+        "corrected": null,
+        "type": "removed"
+      },
+      {
+        "lineNumber": 35,
+        "original": "}",
+        "corrected": null,
+        "type": "removed"
+      },
+      {
+        "lineNumber": 36,
+        "original": "",
+        "corrected": null,
+        "type": "removed"
+      }
+    ],
+    "llmAnalysis": {
+      "model": "openai/gpt-oss-120b",
+      "source": "groq",
+      "analysisSummary": "The binary search implementation has three classic defects: (1) midpoint calculation can overflow, (2) the right bound is initialized one past the last valid index, and (3) when the target is smaller than the middle element the code sets r = mid, which never shrinks the search interval and causes an infinite loop.",
+      "fixExplanation": "Replaced the unsafe midpoint formula with the overflow‑free version, corrected the initial right bound to the last valid index, and changed the update for the case arr[mid] > target to r = mid - 1 so the search interval strictly shrinks, eliminating the infinite loop.",
+      "edgeCasesMissed": [
+        "Empty input array (n==0) – current code will set r = -1 and the loop terminates correctly, but callers should handle n==0 gracefully.",
+        "Very large arrays where indices approach INT_MAX – overflow is now prevented by the safe midpoint calculation.",
+        "Target larger than all elements – loop terminates with -1 as expected."
+      ]
+    },
+    "problemStatement": "Given a sorted array of N integers and a target value, output the 0-based index if target exists in array, or -1 otherwise.",
+    "reconciliation": {
+      "bugs": [
+        {
+          "id": "bug-1",
+          "title": "Midpoint integer overflow",
+          "category": "Syntax Error",
+          "severity": "Medium",
+          "lines": [
+            14
+          ],
+          "rootCause": "Using (l + r) / 2 can overflow when l and r are large positive ints.",
+          "problematicCode": "int mid = (l + r) / 2; // Midpoint integer overflow hazard",
+          "suggestedFixSnippet": "int mid = l + (r - l) / 2; // safe midpoint",
+          "confidence": 0.99,
+          "verificationStatus": "VERIFIED",
+          "evidence": "Corroborated by static analysis rule 'Integer Overflow in Midpoint Calculation' and observed test failures."
+        },
+        {
+          "id": "bug-2",
+          "title": "Right bound off‑by‑one",
+          "category": "Logic Error",
+          "severity": "High",
+          "lines": [
+            11
+          ],
+          "rootCause": "r is set to arr.size(), which is one past the last valid index, risking out‑of‑range access.",
+          "problematicCode": "int r = arr.size(); // Potential boundary issue",
+          "suggestedFixSnippet": "int r = static_cast<int>(arr.size()) - 1; // last valid index",
+          "confidence": 0.99,
+          "verificationStatus": "SUSPECTED",
+          "evidence": "Observed test case failures exist, but could not link directly to this specific line."
+        },
+        {
+          "id": "bug-3",
+          "title": "Infinite loop on smaller target",
+          "category": "Logic Error",
+          "severity": "Critical",
+          "lines": [
+            18
+          ],
+          "rootCause": "When arr[mid] > target the code does r = mid; which does not exclude mid, so l never advances and the loop can never terminate.",
+          "problematicCode": "r = mid; // Bug: leads to infinite loop when target is smaller",
+          "suggestedFixSnippet": "r = mid - 1; // exclude mid and shrink interval",
+          "confidence": 0.99,
+          "verificationStatus": "VERIFIED",
+          "evidence": "Empirically verified by dynamic test case: Test 'Target Smaller Than Left (Edge Case)' timed out due to infinite loop or recursion."
+        }
+      ],
+      "summary": {
+        "total": 3,
+        "verified": 2,
+        "suspected": 1,
+        "unverified": 0,
+        "inconclusive": 0
+      }
+    },
+    "sourceCode": "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\n// Buggy Binary Search:\n// 1. mid = (l + r) / 2 can overflow for large indices.\n// 2. r = mid leads to an infinite loop if target is smaller than middle element.\nint binarySearch(const vector<int>& arr, int target) {\n    int l = 0;\n    int r = arr.size(); // Potential boundary issue\n\n    while (l <= r) {\n        int mid = (l + r) / 2; // Midpoint integer overflow hazard\n        if (arr[mid] == target) {\n            return mid;\n        } else if (arr[mid] < target) {\n            l = mid + 1;\n        } else {\n            r = mid; // Bug: leads to infinite loop when target is smaller\n        }\n    }\n    return -1;\n}\n\nint main() {\n    int n, target;\n    if (!(cin >> n >> target)) return 0;\n    vector<int> arr(n);\n    for (int i = 0; i < n; i++) {\n        cin >> arr[i];\n    }\n    cout << binarySearch(arr, target) << endl;\n    return 0;\n}\n",
+    "staticAnalysis": {
+      "totalFindings": 1,
+      "findings": [
+        {
+          "id": "static-overflow-bs-14",
+          "title": "Integer Overflow in Midpoint Calculation",
+          "category": "Integer Overflow",
+          "severity": "Medium",
+          "line": 14,
+          "snippet": "int mid = (l + r) / 2; // Midpoint integer overflow hazard",
+          "message": "'(l + r) / 2' can cause 32-bit signed integer overflow when both indices are large. Use 'l + (r - l) / 2' instead.",
+          "suggestedFix": "        int mid = l + (r - l) / 2; // Midpoint integer overflow hazard"
+        }
+      ]
+    },
+    "testExecution": {
+      "totalTests": 3,
+      "passedCount": 1,
+      "failedCount": 2,
+      "allPassed": false,
+      "tests": [
+        {
+          "id": "tc-1",
+          "name": "Target Present in Middle",
+          "input": "5 7\n1 3 5 7 9",
+          "expectedOutput": "3",
+          "actualOutput": "3\n",
+          "stderr": "",
+          "status": "PASSED",
+          "passed": true,
+          "executionTimeMs": 707,
+          "exitCode": 0,
+          "signal": null,
+          "errorMessage": null
+        },
+        {
+          "id": "tc-2",
+          "name": "Target Smaller Than Left (Edge Case)",
+          "input": "5 0\n1 3 5 7 9",
+          "expectedOutput": "-1",
+          "actualOutput": "",
+          "stderr": "",
+          "status": "TIME_LIMIT_EXCEEDED",
+          "passed": false,
+          "executionTimeMs": 2004,
+          "exitCode": null,
+          "signal": "SIGKILL",
+          "errorMessage": "Execution exceeded time limit of 2000ms (infinite loop or high complexity)"
+        },
+        {
+          "id": "tc-3",
+          "name": "Single Element Not Found",
+          "input": "1 4\n5",
+          "expectedOutput": "-1",
+          "actualOutput": "",
+          "stderr": "",
+          "status": "TIME_LIMIT_EXCEEDED",
+          "passed": false,
+          "executionTimeMs": 2001,
+          "exitCode": null,
+          "signal": "SIGKILL",
+          "errorMessage": "Execution exceeded time limit of 2000ms (infinite loop or high complexity)"
+        }
+      ]
+    },
+    "timestamp": "2026-10-26T18:40:33.133Z",
+    "updatedAt": "2026-10-26T18:40:33.145Z",
+    "verdict": "LOGIC_ERRORS_DETECTED",
+    "verdictDescription": "Logical errors or behavioral defects were identified."
+  }
+]

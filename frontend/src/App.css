@@ -1,0 +1,8 @@
+/* App.css - Minimal additional styles */
+.App {
+  @apply min-h-screen flex flex-col bg-gray-50;
+}
+
+.main-content {
+  @apply flex-1 p-5 max-w-7xl mx-auto w-full;
+}
